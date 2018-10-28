@@ -1,0 +1,95 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+
+<!-- You might want to try something fancier: -->
+<!-- html/nunjucks docs: https://mozilla.github.io/nunjucks/ -->
+<!-- pug: https://pugjs.org/ -->
+<!-- haml: http://haml.info/ -->
+<!-- hbs(handlebars): http://handlebarsjs.com/ -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Marc the confused chatbot</title>
+    <meta name="description" content="Marc, a confused chatbot.">
+    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/style.css">
+    
+    <!-- import the webpage's client-side javascript file -->
+    <script src="/client.js" defer></script>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script>
+    var socket = io()
+      
+    </script>
+  </head>
+  <body>
+    <img src="http://www.socializingai.com/wp-content/uploads/2017/07/woebot1.gif" style="width:5%; height:10%; position: absolute; top: 0; left: 0; margin: 10px;">
+    <div align="center">
+      
+    <h5>
+      <b>Hi, I'm Marc the confused chatbot</b> created by a Year 9 student
+      </h5>
+  <h1>
+    Talk to me!
+    </h1>
+      
+        <div class="farm">
+    
+    Message: <input type="text" id="q">
+    <button id="butt" onclick="submit()">
+      Submit
+    </button>
+                </div>
+            
+
+      
+    <p id="res">
+      Results go here
+    </p>
+      
+      <ul id="messages"></ul>
+    <script>
+      var input = document.getElementById('q');
+      var quest = document.getElementById('messages')
+      
+      
+        function submit() {
+          var li = document.createElement("li");
+      var ques = input.value;
+        input.value = ""
+          socket.emit('question', {q: ques})
+          li.innerHTML = '<b>You:</b> '+ques;
+          quest.appendChild(li);
+    }
+      
+      document.onkeydown = function(event) {
+        var e = event.keyCode || window.event.keyCode
+        if (e == 13) submit()
+    }
+    </script>
+
+    <script>
+      var res = document.getElementById("res");
+  socket.on('processing', function(data){
+    res.innerHTML = '<i>Processing for an answer...</i><br>'+
+    '<img src="https://i.gifer.com/INv6.gif" style="width: 10%; height: 10%;">'
+  })
+      socket.on('res', function(data) {
+        var lires = document.createElement('li');
+        lires.innerHTML = '<b>Me:</b> '+data.res;
+        quest.appendChild(lires);
+        res.innerHTML = ''
+      })
+    </script>
+      </div>
+    <p style="position: fixed; bottom: 0; right: 0; margin: 10px; background-color: grey; padding: 5px;">
+      Created by Waqqas
+    </p>
+  </body>
+</html>
